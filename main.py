@@ -1,6 +1,6 @@
 import logging
 
-logging.basicConfig(level=logging.DEBUG, format='%(asctime)s %(message)s')
+logging.basicConfig(level=logging.DEBUG, format='\n%(asctime)s %(message)s')
 
 
 def addition(*args: float) -> float:
@@ -38,6 +38,7 @@ operations = {
 
 def collect_numbers():
     numbers = []
+    print("Podaj kolejno liczby, na których chcesz wykonać działanie. Aby zakończyć podawanie wpisz 'done'.")
     while True:
         try:
             user_input = input("Podaj liczbę: ")
@@ -46,7 +47,7 @@ def collect_numbers():
             number = float(user_input)
             numbers.append(number)
         except ValueError:
-            logging.info("To nie jest liczba!")
+            logging.info("To nie jest liczba! Podaj liczbę: ")
     return numbers
 
 
@@ -72,7 +73,7 @@ if __name__ == "__main__":
     operator = define_operation()
     numbers = collect_numbers()
     if operator == '4' and any(number == 0 for number in numbers[1:]):  # division by 0
-        logging.info("Nie można dzielić przez 0.")
+        logging.info("Nie można dzielić przez 0. Podaj liczbę: ")
         numbers = collect_numbers()
     logging.info(f"{operations[operator][1]} {print_numbers(numbers)}.")
     outcome = operations[operator][0](*numbers)
