@@ -35,21 +35,21 @@ if __name__ == "__main__":
         if operator in ['1', '2', '3', '4']:
             break  # Break out of the loop if a valid number is entered
         else:
-            logging.info("To nie jest odpowiednia liczba! Podaj 1, 2, 3 lub 4.")
+            print("To nie jest odpowiednia liczba! Podaj 1, 2, 3 lub 4.")
 
     while True:
         try:
             number_1 = float(input("Podaj pierwszą liczbę: "))
             break  # Break out of the loop if a valid number is entered
         except ValueError:
-            logging.info("To nie jest liczba!")
+            print("To nie jest liczba!")
 
     while True:
         try:
             number_2 = float(input("Podaj drugą liczbę: "))
             break  # Break out of the loop if a valid number is entered
         except ValueError:
-            logging.info("To nie jest liczba!")
+            print("To nie jest liczba!")
 
     logging.info(f"{operations[operator][1]} {number_1} i {number_2}.")
     outcome = operations[operator][0](number_1, number_2)
