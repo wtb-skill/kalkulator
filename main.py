@@ -3,20 +3,29 @@ import logging
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s %(message)s')
 
 
-def addition(num_1: float, num_2: float) -> float:
-    return num_1 + num_2
+def addition(*args: float) -> float:
+    return sum(args)
 
 
-def subtraction(num_1: float, num_2: float) -> float:
-    return num_1 - num_2
+def subtraction(*args: float) -> float:
+    result = 0
+    for number in args:
+        result -= number
+    return result
 
 
-def multiplication(num_1: float, num_2: float) -> float:
-    return num_1 * num_2
+def multiplication(*args: float) -> float:
+    result = 1
+    for number in args:
+        result *= number
+    return result
 
 
-def division(num_1: float, num_2: float) -> float:
-    return num_1 / num_2
+def division(*args: float) -> float:
+    result = args[0]
+    for number in args[1:]:
+        result /= number
+    return result
 
 
 operations = {
@@ -27,34 +36,45 @@ operations = {
 }
 
 
-if __name__ == "__main__":
-
+def collect_numbers():
+    numbers = []
     while True:
-        operator = input(
+        try:
+            user_input = input("Podaj liczbę: ")
+            if user_input.lower() == 'done':
+                break
+            number = float(user_input)
+            numbers.append(number)
+        except ValueError:
+            logging.info("To nie jest liczba!")
+    return numbers
+
+
+def define_operation():
+    while True:
+        user_input = input(
             "Podaj działanie, posługując się odpowiednią liczbą: 1 Dodawanie, 2 Odejmowanie, 3 Mnożenie, 4 Dzielenie: ")
-        if operator in ['1', '2', '3', '4']:
+        if user_input in ['1', '2', '3', '4']:
             break  # Break out of the loop if a valid number is entered
         else:
             logging.info("To nie jest odpowiednia liczba! Podaj 1, 2, 3 lub 4.")
+    return user_input
 
-    while True:
-        try:
-            number_1 = float(input("Podaj pierwszą liczbę: "))
-            break  # Break out of the loop if a valid number is entered
-        except ValueError:
-            logging.info("To nie jest liczba!")
 
-    while True:
-        try:
-            number_2 = float(input("Podaj drugą liczbę: "))
-            break  # Break out of the loop if a valid number is entered
-        except ValueError:
-            logging.info("To nie jest liczba!")
+def print_numbers(numbers):
+    message = str(numbers[0])
+    for number in numbers[1:]:
+        message += f" i {number}"
+    return message
 
-    logging.info(f"{operations[operator][1]} {number_1} i {number_2}.")
-    outcome = operations[operator][0](number_1, number_2)
+
+if __name__ == "__main__":
+    operator = define_operation()
+    numbers = collect_numbers()
+    if operator == '4' and any(number == 0 for number in numbers[1:]):  # division by 0
+        logging.info("Nie można dzielić przez 0.")
+        numbers = collect_numbers()
+    logging.info(f"{operations[operator][1]} {print_numbers(numbers)}.")
+    outcome = operations[operator][0](*numbers)
     logging.info(f"Wynik to {outcome}.")
 
-
-# TODO 6: W wypadku mnożenia i dodawania daj użytkownikowi możliwość wpisania większej ilości argumentów niż tylko dwa,
-#         np. możesz dodać do siebie trzy i więcej liczb.
